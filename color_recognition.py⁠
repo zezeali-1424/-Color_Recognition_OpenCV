@@ -1,0 +1,23 @@
+import cv2
+import numpy as np
+
+# 1. قراءة الصورة
+image = cv2.imread('image.jpg')
+
+# 2. تحويل ألوان الصورة من BGR إلى HSV لسهولة تحديد الألوان
+hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+# 3. تحديد نطاق اللون الأزرق في نظام HSV
+lower_blue = np.array([90, 50, 50])
+upper_blue = np.array([130, 255, 255])
+
+# 4. إنشاء قناع (Mask) يظهر فقط الأجزاء الزرقاء من الصورة
+blue_mask = cv2.inRange(hsv_image, lower_blue, upper_blue)
+
+# 5. دمج القناع مع الصورة الأصلية لإظهار اللون الأزرق فقط وعزل الباقي
+result = cv2.bitwise_and(image, image, mask=blue_mask)
+
+# 6. حفظ الصورة الناتجة
+cv2.imwrite('detected_color.jpg', result)
+
+print("تمت عملية التعرف على اللون بنجاح وحفظ الصورة!")
